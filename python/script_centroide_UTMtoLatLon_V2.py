@@ -1,3 +1,4 @@
+
 import geopandas as gpd
 import pandas as pd
 import pyodbc
@@ -13,7 +14,7 @@ conn_str = (
     #r'PWD=id_senha;'
 )
 
-# --- FUNÇÃO ---
+# --- FUNÇÃO DE LÓGICA REUTILIZÁVEL ---
 def processar_zona_com_geopandas(config):
     nome_tabela = config["nome_tabela"]
     coluna_geom = config["coluna_geom"]
@@ -36,9 +37,7 @@ def processar_zona_com_geopandas(config):
         df.dropna(subset=['geometry'], inplace=True)
         
         print(f"   Leitura concluída. {len(df)} registros encontrados.")
-        if df.empty:
-            print("   Nenhum dado para processar.")
-            return
+        if df.empty: return
 
         gdf = gpd.GeoDataFrame(df, geometry=gpd.GeoSeries.from_wkb(df['geometry']), crs=config["epsg_origem"])
         print("   GeoDataFrame criado com sucesso.")
@@ -58,8 +57,9 @@ def processar_zona_com_geopandas(config):
         print(f"3. Reprojetando {len(gdf)} centroides para Lat/Lon (EPSG:4674)...")
         gdf_latlon = gdf.to_crs("EPSG:4674")
         
-        gdf[config["coluna_lat"]] = gdf_latlon.y
-        gdf[config["coluna_lon"]] = gdf_latlon.x
+        # --- A CORREÇÃO ESTÁ AQUI ---
+        gdf[config["coluna_lat"]] = gdf_latlon.geometry.y
+        gdf[config["coluna_lon"]] = gdf_latlon.geometry.x
         print("   Reprojeção concluída!")
 
         # ETAPA 4: ATUALIZAÇÃO EM LOTE
@@ -78,39 +78,35 @@ def processar_zona_com_geopandas(config):
                 cursor.executemany(update_query, dados_para_atualizar)
                 conn.commit()
         
-        print(f"A tabela '{nome_tabela}' foi atualizada.")
+        print(f"   ✅ SUCESSO! A tabela '{nome_tabela}' foi atualizada.")
 
     except Exception as e:
-        print(f"ERRO: {e}")
+        print(f"   ❌ ERRO: {e}")
     finally:
         end_time = time.time()
         print(f"   Tempo de execução: {end_time - start_time:.2f} segundos.")
 
 # --- PONTO DE ENTRADA DO SCRIPT ---
-# Este bloco só é executado quando você roda o script diretamente (ex: `python seu_script.py`)
 if __name__ == "__main__":
     
-    # As configurações agora vivem aqui, no "cérebro" da execução.
-    # Elas são passadas como argumentos para a nossa função-ferramenta.
     ZONA_22S_CONFIG = { 
-        "nome_tabela": "[SCHEMA].[TABELA]",
-        "coluna_geom": "CAMPO_GEOM",
-        "coluna_lat": "CAMPO_ATUALIZAR",
-        "coluna_lon": "CAMPO_ATUALIZAR",
+        "nome_tabela": "[SCHEMA].[TbOrigem]",
+        "coluna_geom": "Campo_Geom",
+        "coluna_lat": "Campo_Latitude",
+        "coluna_lon": "Campo_Longitude",
         "epsg_origem": "EPSG:31982"
     }
 
     ZONA_23S_CONFIG = { 
-        "nome_tabela": "[SCHEMA].[TABELA]",
-        "coluna_geom": "CAMPO_GEOM",
-        "coluna_lat": "CAMPO_ATUALIZAR",
-        "coluna_lon": "CAMPO_ATUALIZAR",
-        "epsg_origem": "EPSG:31983"
+        "nome_tabela": "[SCHEMA].[TbOrigem]",
+        "coluna_geom": "Campo_Geom",
+        "coluna_lat": "Campo_Latitude",
+        "coluna_lon": "Campo_Longitude",
+        "epsg_origem": "EPSG:31982"
     }
-  
-    print("Iniciando fluxo de atualização de coordenadas.")
 
-    # Orquestração: chama a função de processamento para cada configuração.
+    print("Iniciando fluxo de atualização de coordenadas.")
+    
     processar_zona_com_geopandas(ZONA_22S_CONFIG)
     processar_zona_com_geopandas(ZONA_23S_CONFIG)
 
