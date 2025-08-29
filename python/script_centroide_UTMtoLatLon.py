@@ -3,7 +3,7 @@ import pandas as pd
 import pyodbc
 import time
 
-# --- CONFIGURAÇÔES ---
+# _--- CONFIGURAÇÔES ---_
 conn_str = (
     r'DRIVER={ODBC Driver 17 for SQL Server};'
     r'SERVER=srv-vd-101;'
