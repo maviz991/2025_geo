@@ -3,34 +3,33 @@ import pandas as pd
 import pyodbc
 import time
 
-# _--- CONFIGURAÇÔES ---_
+# --- CONFIGURAÇÔES ---
 conn_str = (
     r'DRIVER={ODBC Driver 17 for SQL Server};'
-    r'SERVER=srv-vd-101;'
-    r'DATABASE=Corporativo;'
+    r'SERVER=end_servidor;'
+    r'DATABASE=id_banco;'
     r'Trusted_Connection=yes;'
-    #r'UID=us_QGIS;'
-    #r'PWD=us_QGIS;'
-    
+    #r'UID=id_user;'
+    #r'PWD=id_senha;'
 )
 
-# --- FUNÇÃO ---
-def processar_zona_com_geopandas(config):
-   ZONA_22S_CONFIG = { 
-    "nome_tabela": "[TERRAS].[tbGeoUTM22S2]",
-    "coluna_geom": "GU22GMGeo",
-    "coluna_lat": "LatitudeUTM22S2",
-    "coluna_lon": "LongitudeUTM22S2",
+ZONA_22S_CONFIG = { 
+    "nome_tabela": "[SCHEMA].[TABELA]",
+    "coluna_geom": "CAMPO_GEOM",
+    "coluna_lat": "CAMPO_ATUALIZAR",
+    "coluna_lon": "CAMPO_ATUALIZAR",
     "epsg_origem": "EPSG:31982"
 }
 ZONA_23S_CONFIG = { 
-    "nome_tabela": "[TERRAS].[tbGeoUTM23S2]",
-    "coluna_geom": "GU23GMGeo",
-    "coluna_lat": "LatitudeUTM23S2",
-    "coluna_lon": "LongitudeUTM23S2", 
+    "nome_tabela": "[SCHEMA].[TABELA]",
+    "coluna_geom": "CAMPO_GEOM",
+    "coluna_lat": "CAMPO_ATUALIZAR",
+    "coluna_lon": "CAMPO_ATUALIZAR",
     "epsg_origem": "EPSG:31983"
 }
-   
+
+# --- FUNÇÃO ---
+def processar_zona_com_geopandas(config):
     nome_tabela = config["nome_tabela"]
     coluna_geom = config["coluna_geom"]
     
