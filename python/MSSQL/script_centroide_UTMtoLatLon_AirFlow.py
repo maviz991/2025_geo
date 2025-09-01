@@ -10,6 +10,7 @@ import time
 
 def get_corporativo_connection():
     # --- CONFIGURAÇÔES ---
+    #Sempre em string (erro visto em testes)
     conn = BaseHook.get_connection('Hml_DB_ID-DB')
     conn_str = (
         f"DRIVER={conn.extra_dejson.get('Driver', 'ODBC Driver 18 for SQL Server')};"
