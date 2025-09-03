@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 import os
 
 #Caminhos (pasta local)
-caminho_csv = 'nome_arquivo.csv'
+caminho_csv = 'tb_mgb2_metadata.cvs'
 caminho_template_xml = 'tamplate_mgb20.xml'
 pasta_saida = 'metadados_gerados'
 
