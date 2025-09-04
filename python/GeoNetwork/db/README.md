@@ -17,8 +17,8 @@ Antes de executar o script, certifique-se de que você tem:
 pip install pandas lxml
 ```
 
-- **pandas**: Utilizada para ler e processar o arquivo CSV de forma eficiente.  
-- **lxml**: Uma biblioteca poderosa para analisar e manipular os arquivos XML, essencial para garantir a estrutura correta dos namespaces e das tags.
+- **pandas**: Ler e processa o arquivo CSV.  
+- **lxml**: Analisa e manipula os arquivos XML, essencial para garantir a estrutura correta dos namespaces e das tags.
 
 ---
 
@@ -39,7 +39,7 @@ Dentro do arquivo **csvToXML_metadata.py**, há uma seção de configuração no
 
 ```python
 # --- INÍCIO DA CONFIGURAÇÃO ---
-caminho_csv = 'Planilha_MGB2_Metadata_FIPE.csv'
+caminho_csv = 'tb_mgb20_metadata.csv'
 caminho_template_xml = 'tamplate_mgb20.xml'
 pasta_saida = 'metadados_gerados'
 # --- FIM DA CONFIGURAÇÃO ---
@@ -53,13 +53,13 @@ pasta_saida = 'metadados_gerados'
 
 ## 5. Formato dos Arquivos de Entrada
 
-### 5.1. Arquivo CSV (Planilha_MGB2_Metadata_FIPE.csv)
+### 5.1. Arquivo CSV (tb_mgb20_metadata.csv)
 Este arquivo é a fonte de todos os dados variáveis. Ele deve seguir regras estritas para que o script funcione corretamente:
 
 - **Separador**: ponto e vírgula `;`  
 - **Codificação**: UTF-8  
 - **Cabeçalho**: A primeira linha deve conter os nomes exatos das colunas.  
-- **Colunas de Palavras-chave (Keywords)**: Não usar nomes duplicados. Devem ser numeradas sequencialmente, ex.:  
+- **Colunas não podem ter nomes duplicados. Devem ser numeradas sequencialmente, ex.:  
   - `MD_Keywords1`, `MD_Keywords2`, `MD_Keywords3`...  
 - **Colunas de Datas (Formato ISO 8601)**:  
   - **dateStamp (Data do Metadado)**: em UTC (Zulu Time).  
@@ -131,4 +131,4 @@ O script utiliza as bibliotecas:
 
 ---
 
-✅ **Pronto para uso**: Basta ajustar o CSV e o template XML para a sua necessidade.
+Ajustar o CSV e o template XML para a sua necessidade.
