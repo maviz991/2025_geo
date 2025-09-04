@@ -109,15 +109,15 @@ python csvToXmlToDB.py
 ---
 
 ## 8. Pós-Execução: Reindexação no GeoNetwork
-**!! ALERTA IMPORTANTE !!**
+**ALERTA**
 
 A inserção direta no banco de dados **NÃO ATUALIZA OS ÍNDICES DE BUSCA** do GeoNetwork. Após executar o script, os metadados estarão na tabela, mas **não aparecerão nos resultados de busca**.
 
 Para que eles apareçam, você precisa forçar uma reindexação:
 1.  Acesse a interface do GeoNetwork como administrador.
-2.  Vá para **Admin console > Tools > Indexing**.
+2.  Vá para **Admin console > Ferramentas > Reindex records**.
 3.  Clique no botão **Rebuild index**.
 
 Este passo é **obrigatório** para que o GeoNetwork "descubra" os novos registros inseridos diretamente no banco.
 
-```
+---
