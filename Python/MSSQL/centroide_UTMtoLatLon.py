@@ -1,3 +1,5 @@
+#Matheus Dias de Aviz
+#v2.0
 import geopandas as gpd
 import pandas as pd
 import pyodbc
