@@ -1,4 +1,4 @@
-# Gerador de Metadados MGB 2.0 (csvToXML_metadata.py) - V1.0 | Local
+# Gerador de Metadados MGB 2.0 (csvToXML_metadata.py)
 
 ## 1. Visão Geral
 Este script automatiza a criação de múltiplos arquivos de metadados XML, seguindo o padrão **MGB 2.0 BR** (baseado na norma **ISO 19115**).  
