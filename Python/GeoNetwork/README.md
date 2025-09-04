@@ -8,6 +8,6 @@ Para cada linha de dados no arquivo CSV, o script gera um novo arquivo XML, pree
 
 O script é projetado para ser robusto, garantindo que a estrutura do XML gerado seja válida e compatível com sistemas de gerenciamento de metadados, como o **GeoNetwork**.
 
-A Versão 1 tem sáida em um CSV local;
+► A Versão 1 tem sáida em um CSV local;
 
-A Versão 2 tem add em um banco PostegreSQL.
+► A Versão 2 tem add em um banco PostegreSQL.
