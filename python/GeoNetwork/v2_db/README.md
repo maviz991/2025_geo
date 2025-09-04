@@ -5,7 +5,7 @@ Este script automatiza a criação de registros de metadados no padrão **MGB 2.
 
 A principal vantagem é a capacidade de realizar a carga e atualização em massa de registros a partir de uma planilha CSV, integrando-se diretamente ao banco de dados PostgreSQL do GeoNetwork.
 
-**Importante**: Esta abordagem manipula diretamente o banco de dados do GeoNetwork. Embora poderosa, ela bypassa as APIs da aplicação, o que exige configuração cuidadosa.
+**⚠️ Importante**: Esta abordagem manipula diretamente o banco de dados do GeoNetwork. Embora poderosa, ela bypassa as APIs da aplicação, o que exige configuração cuidadosa.
 
 ---
 
@@ -109,7 +109,7 @@ python csvToXmlToDB.py
 ---
 
 ## 8. Pós-Execução: Reindexação no GeoNetwork
-**ALERTA**
+**⚠️ ALERTA**
 
 A inserção direta no banco de dados **NÃO ATUALIZA OS ÍNDICES DE BUSCA** do GeoNetwork. Após executar o script, os metadados estarão na tabela, mas **não aparecerão nos resultados de busca**.
 
