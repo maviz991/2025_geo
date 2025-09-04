@@ -1,5 +1,5 @@
 USE [id_banco]
-GO
+GO 
 
 /****** Object:  UserDefinedFunction [SCHEMA].[fn_UTMtoLatLon]    Script Date: 29/08/2025 15:24:50 ******/
 SET ANSI_NULLS ON
