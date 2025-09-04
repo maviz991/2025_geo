@@ -10,4 +10,4 @@ O script é projetado para ser robusto, garantindo que a estrutura do XML gerado
 
 ► A Versão 1 tem sáida em um CSV local;
 
-► A Versão 2 tem add em um banco PostegreSQL.
+► A Versão 2 tem INSERT/UPDATE em um banco PostegreSQL.
