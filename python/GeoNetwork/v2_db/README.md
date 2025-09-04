@@ -59,7 +59,7 @@ Este arquivo é a fonte de todos os dados variáveis. Ele deve seguir regras est
 - **Separador**: ponto e vírgula `;`  
 - **Codificação**: UTF-8  
 - **Cabeçalho**: A primeira linha deve conter os nomes exatos das colunas.  
-- **Colunas não podem ter nomes duplicados. Devem ser numeradas sequencialmente, ex.:  
+- **Colunas não podem ter nomes duplicados**. Devem ser numeradas sequencialmente, ex.:  
   - `MD_Keywords1`, `MD_Keywords2`, `MD_Keywords3`...  
 - **Colunas de Datas (Formato ISO 8601)**:  
   - **dateStamp (Data do Metadado)**: em UTC (Zulu Time).  
