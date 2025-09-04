@@ -1,46 +1,58 @@
-# v2.0 - Gerador de Metadados MGB 2.0 (csvToXML_metadata.py)
+# v2.0 - Gerador e Inseridor de Metadados MGB 2.0 (csvToXmlToDB.py)
 
-## 📌 Objetivo
-Este script tem como finalidade **ler metadados a partir de um arquivo CSV**, preencher um **template XML** conforme os campos do CSV, e em seguida **armazenar o XML final em um banco PostgreSQL**.  
-Os registros são armazenados em uma tabela específica, com suporte a **inserção e atualização automática** (`ON CONFLICT DO UPDATE`).
+## 1. Visão Geral
+Este script representa uma evolução do gerador de metadados, automatizando não apenas a criação dos arquivos XML no padrão **MGB 2.0 BR** (baseado na norma **ISO 19115**), mas também a sua **inserção/atualização direta** em um banco de dados **PostgreSQL**.
+
+Ele utiliza um arquivo CSV como fonte de dados e um XML como template. Para cada linha no CSV, o script gera o conteúdo XML correspondente e o armazena na base de dados, eliminando a necessidade de gerenciar arquivos físicos.
+
+Essa abordagem centraliza o gerenciamento dos metadados e torna o script re-executável, atualizando registros existentes caso sejam processados novamente, graças à lógica "UPSERT" (Update/Insert).
 
 ---
 
-## ⚙️ Dependências
+## 2. Pré-requisitos
+Antes de executar o script, certifique-se de que você tem:
 
-Antes de rodar o script, certifique-se de instalar as seguintes bibliotecas Python:
+- **Python 3.x** instalado.
+- **Acesso a um banco de dados PostgreSQL**.
+- As bibliotecas Python necessárias. Para instalá-las, abra seu terminal ou prompt de comando e execute:
 
 ```bash
-pip install lxml pandas psycopg2-binary
+pip install pandas lxml psycopg2-binary
 ```
 
-Bibliotecas utilizadas:
-- **lxml** → Manipulação do XML.
-- **pandas** → Leitura e tratamento do CSV.
-- **uuid** → Geração de identificadores únicos (UUID).
-- **datetime** → Controle de datas.
-- **os** → Manipulação de arquivos.
-- **psycopg2** → Conexão com PostgreSQL.
+- **pandas**: Para ler e processar o arquivo CSV.
+- **lxml**: Para analisar e manipular os arquivos XML.
+- **psycopg2-binary**: O driver de conexão para interagir com o banco de dados PostgreSQL.
 
 ---
 
-## 🗂 Estrutura de Arquivos
+## 3. Estrutura de Arquivos
+Os arquivos de entrada devem estar na mesma pasta que o script:
 
 ```
-📂 projeto/
-├── Planilha_MGB2_Metadata_FIPE.csv   # Planilha com os metadados de entrada
-├── tamplate_mgb20.xml                # Template XML base
-├── script.py                         # Script principal
-└── README.md                         # Documentação
+/seu_projeto/
+|-- csvToXmlToDB.py                  # Este script
+|-- tb_mgb20_metadata.csv            # Seu arquivo de dados
+|-- tamplate_mgb20.xml               # Seu arquivo de modelo
 ```
 
 ---
 
-## 🛢 Configuração do Banco
+## 4. Configuração do Script
+Dentro do script, existem duas seções de configuração que devem ser ajustadas:
 
-A conexão ao banco é configurada no dicionário `db_config`:
+### 4.1. Configuração dos Arquivos
+```python
+# --- CONFIGURAÇÃO DOS ARQUIVOS ---
+caminho_csv = 'tb_mgb20_metadata.csv'
+caminho_template_xml = 'tamplate_mgb20.xml'
+```
+
+### 4.2. Configuração do Banco de Dados
+Esta seção é crucial e deve ser preenchida com as informações do seu ambiente.
 
 ```python
+# --- CONFIGURAÇÃO DO BANCO ---
 db_config = {
     "host": "localhost",
     "port": "5432",
@@ -53,77 +65,81 @@ db_config = {
     "xml_column": "conteudo_xml"
 }
 ```
+- **host, port, dbname, user, password**: credenciais de acesso ao seu PostgreSQL.
+- **schema**: o schema onde a tabela de metadados está localizada (ex: `public`).
+- **table**: o nome da tabela que armazenará os metadados.
+- **id_column**: o nome da coluna que servirá como chave primária (armazenará o `fileIdentifier`).
+- **xml_column**: o nome da coluna que armazenará o conteúdo XML completo.
 
-### Estrutura esperada da tabela
+---
+
+## 5. Preparação do Banco de Dados
+Antes da primeira execução, a tabela de destino precisa existir no banco. Você pode criá-la com um comando SQL semelhante a este:
 
 ```sql
+-- Garante que o schema exista (opcional, mas recomendado)
 CREATE SCHEMA IF NOT EXISTS metadados;
 
+-- Cria a tabela para armazenar os registros de metadados
 CREATE TABLE metadados.registros (
-    id UUID PRIMARY KEY,
-    conteudo_xml XML NOT NULL
+    id VARCHAR(255) PRIMARY KEY,
+    conteudo_xml TEXT,
+    data_atualizacao TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 ```
+**Importante:** a coluna `id` (ou o nome que você definir em `id_column`) **deve ser a chave primária** (`PRIMARY KEY`) para que a lógica de atualização (`ON CONFLICT`) do script funcione corretamente.
 
 ---
 
-## 🔄 Fluxo de Execução
+## 6. Formato dos Arquivos de Entrada
 
-1. **Ler o CSV** (`Planilha_MGB2_Metadata_FIPE.csv`).  
-   - Apenas registros com `LanguageCode` preenchido são processados.  
-2. **Carregar o template XML** (`tamplate_mgb20.xml`).  
-3. **Gerar UUID único** para cada registro.  
-4. **Preencher os campos no XML** com os valores do CSV.  
-5. **Converter o XML em string formatada**.  
-6. **Inserir/atualizar no PostgreSQL**:  
-   - Se o `id` já existir → atualiza (`conteudo_xml`).  
-   - Se não existir → insere um novo registro.  
-7. **Commit final** no banco.  
+### 6.1. Arquivo CSV (tb_mgb20_metadata.csv)
+As regras para o arquivo CSV permanecem as mesmas: separador por ponto e vírgula, codificação UTF-8, cabeçalho na primeira linha e nomes de coluna únicos (ex: `MD_Keywords1`, `MD_Keywords2`). Os formatos de data ISO 8601 são essenciais.
+
+### 6.2. Arquivo de Template XML (tamplate_mgb20.xml)
+O arquivo de template deve ser um XML válido no padrão MGB 2.0 BR, contendo todas as tags estruturais necessárias para o preenchimento.
 
 ---
 
-## ▶️ Como Rodar
+## 7. Como Executar o Script
+1.  Abra um terminal ou prompt de comando.
+2.  Navegue até a pasta onde os arquivos estão localizados.
+3.  Execute o seguinte comando:
 
 ```bash
-python script.py
+python csvToXmlToDB.py
 ```
 
-Certifique-se de:
-- Ter o PostgreSQL rodando.
-- Usuário e senha configurados corretamente no `db_config`.
-- Arquivos CSV e XML estarem no mesmo diretório do script.
+O script se conectará ao banco, processará cada linha do CSV e informará no console cada registro que for inserido ou atualizado na base de dados.
 
 ---
 
-## 📤 Saída
+## 8. Saída
+O script **não cria arquivos XML locais**. A saída do processo são registros no banco de dados:
 
-- Para cada registro processado, será exibida uma mensagem no console:
-
-```
-Conectando ao banco 'seu_banco'...
-Conexão bem-sucedida.
-Encontrados 10 registros para processar.
---> Registro 'Título Exemplo' (ID: 123e4567-e89b-12d3-a456-426614174000) inserido/atualizado.
-Todas as alterações foram salvas no banco.
-Conexão fechada.
-```
-
-- Os registros ficam armazenados na tabela definida em `db_config`.
+- Para cada linha do CSV, uma linha correspondente será **inserida** ou **atualizada** na tabela configurada.
+- A coluna `id_column` será preenchida com o `fileIdentifier` (UUID) gerado para o metadado.
+- A coluna `xml_column` conterá o texto completo do metadado XML gerado.
 
 ---
 
-## 🛠 Tratamento de Erros
+## 9. Detalhamento do Código (Como Funciona)
 
-- **Arquivo CSV ou XML não encontrado** → O script interrompe e exibe mensagem de erro.  
-- **Erro de banco de dados** → O `rollback()` é executado e a transação não é confirmada.  
-- **Erro crítico** → O stack trace completo é mostrado para depuração.  
-
+### Função Principal: `gerar_e_inserir_metadados`
+1.  **Conexão com o Banco**: estabelece uma conexão com o PostgreSQL usando `psycopg2.connect()`.
+2.  **Leitura do CSV**: carrega os dados usando pandas.
+3.  **Loop Principal**:
+    - Itera sobre cada linha do CSV.
+    - Recarrega o template XML a cada iteração.
+    - Preenche as tags com os dados da linha, gerando novos UUIDs para o registro e o autor.
+    - Converte a árvore XML final para uma string de texto codificada em UTF-8.
+4.  **Inserção no Banco (Lógica "UPSERT")**:
+    - O script utiliza o comando `INSERT ... ON CONFLICT ... DO UPDATE`.
+    - **Se o `id` (fileIdentifier) não existir na tabela**, ele insere um novo registro.
+    - **Se o `id` já existir**, em vez de dar erro, ele atualiza o `conteudo_xml` da linha existente com a nova versão. Isso torna o script seguro para ser re-executado.
+5.  **Gerenciamento da Transação**:
+    - `conn.commit()`: salva todas as inserções/atualizações no banco ao final do processo.
+    - `conn.rollback()`: em caso de erro, desfaz qualquer alteração parcial para manter a consistência dos dados.
+    - O bloco `finally` garante que a conexão com o banco seja sempre fechada de forma segura, mesmo se ocorrerem erros.
+  
 ---
-
-## 📌 Observações
-
-- O script está pronto para trabalhar com **inserções incrementais**, evitando duplicação de registros.  
-- Para ambientes de produção, recomenda-se:
-  - Uso de variáveis de ambiente para credenciais (`os.environ`).  
-  - Logging estruturado em vez de `print()`.  
-  - Validação extra dos dados do CSV.  
