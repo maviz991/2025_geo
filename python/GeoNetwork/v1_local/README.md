@@ -1,4 +1,4 @@
-# Gerador de Metadados MGB 2.0 (csvToXML_metadata.py) - V1.0 | Local
+# v1.0 - Gerador de Metadados MGB 2.0 (csvToXML_metadata.py)
 
 ## 1. Visão Geral
 Este script automatiza a criação de múltiplos arquivos de metadados XML, seguindo o padrão **MGB 2.0 BR** (baseado na norma **ISO 19115**).  
@@ -20,8 +20,8 @@ Antes de executar o script, certifique-se de que você tem:
 pip install pandas lxml
 ```
 
-- **pandas**: utilizada para ler e processar o arquivo CSV de forma eficiente.  
-- **lxml**: biblioteca poderosa para analisar e manipular os arquivos XML, essencial para garantir a estrutura correta dos namespaces e das tags.  
+- **pandas**: Ler e processa o arquivo CSV.  
+- **lxml**: Analisa e manipula os arquivos XML, essencial para garantir a estrutura correta dos namespaces e das tags.  
 
 ---
 
@@ -57,7 +57,7 @@ pasta_saida = 'metadados_gerados'
 
 ## 5. Formato dos Arquivos de Entrada
 
-### 5.1. Arquivo CSV (Planilha_MGB2_Metadata_FIPE.csv)
+### 5.1. Arquivo CSV (tb_mgb20_metadata.csv)
 Este arquivo é a fonte de todos os dados variáveis. Ele deve seguir regras estritas para que o script funcione corretamente:
 
 - **Separador**: ponto e vírgula (`;`).  
