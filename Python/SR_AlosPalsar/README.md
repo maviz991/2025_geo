@@ -122,6 +122,7 @@ graph TD
         L["Usar ferramenta Mosaico (Merge) no QGIS"] --> M[["DEM Final Mosaico (.tif)"]];
     end
 
+    style G fill:#0b2996,stroke:#ffffff
     style C fill:#8a918c,stroke:#ffffff
     style F fill:#8a918c,stroke:#ffffff
     style I fill:#8a918c,stroke:#ffffff
