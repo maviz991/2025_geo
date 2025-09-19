@@ -6,7 +6,7 @@ import json
 output_filename_geojson = 'footprints_sp.geojson'
 
 # Parâmetros da busca
-wkt_sp_retangulo = 'POLYGON((-53.2 -25.4, -44.1 -25.4, -44.1 -19.7, -53.2 -19.7, -53.2 -25.4))'
+wkt_sp_retangulo = 'POLYGON((-53.2 -25.4, -44.1 -25.4, -44.1 -19.7, -53.2 -19.7, -53.2 -25.4))' #Sempre em wkt
 opts = {
     'platform': asf.PLATFORM.ALOS,
     'intersectsWith': wkt_sp_retangulo,
