@@ -25,7 +25,7 @@ Não podemos baixar dados às cegas. Primeiro, precisamos descobrir quais imagen
 Mas para isso devemos nos guiar a partir de uma análise empirica das datas, através de [`seach_date_analyse.py`](search_date_analyse.py), para filtramos as datas que vamos trabalhar a seguir.
 
 
-#### 1.12 - Script de filtro temporal
+#### 1.2 - Script de filtro temporal
 
 O script [`seach_date_analyse.py`](search_date_analyse.py) explora e os produtos disponíveis através de em uma lista de imagens disponíveis com: Nome (`fileID`), Data de aquisição (imageamento) e Direção da órbita.
 Ele imprime no terminal a lista, para uma analise melhor gere um txt, executando dessa forma:
@@ -36,12 +36,12 @@ python seach_date_analyse.py > exp_protudo.txt
 
 Então, a partir dessa análise você pode definir o espaço temporal de geração dos footprints de forma mais eficáz.
 
-#### 1.2 - Script de Geração de Footprints
+#### 1.3 - Script de Geração de Footprints
 
 O script [`footprints_search.py`](footprints_search.py) busca todos os produtos ALOS PALSAR RTC sobre uma área `wkt_sp_retangulo` e salva seus footprints em um arquivo **`footprints_sp.geojson`**.
 
 
-#### 1.3 - Visualização no QGIS
+#### 1.4 - Visualização no QGIS
 
 1.  Abra o QGIS.
 2.  Carregue um shapefile ou GeoJSON com o limite do seu estado/área.
@@ -63,6 +63,8 @@ Nosso objetivo é selecionar o **menor número de imagens** que garantam **cober
 ## Etapa 3: Download e Extração Otimizados
 
 Para evitar o download de Terabytes de dados desnecessários, usamos um script que baixa um arquivo por vez, extrai **apenas o DEM**, e deleta o arquivo compactado para liberar espaço.
+
+Ele baixa as cenas através de uma lista txt gerada a partir dos footprints selecionados, que recobrem a área de interesse.
 
 O script [dem_download.py]([dem_download.py) é robusto e lida com diferentes convenções de nomes de arquivos (`_dem.tif` vs `.dem.tif`) e com a estrutura de pastas dentro dos arquivos `.zip`.
 
