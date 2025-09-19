@@ -121,4 +121,11 @@ graph TD
     subgraph "Etapa 4: Mosaico"
         L["Usar ferramenta Mosaico (Merge) no QGIS"] --> M[["DEM Final Mosaico (.tif)"]];
     end
+
+    style C fill:#8a918c,stroke:#ffffff
+    style F fill:#8a918c,stroke:#ffffff
+    style I fill:#8a918c,stroke:#ffffff
+    style K fill:#8a918c,stroke:#ffffff
+    style M fill:#056b1e,stroke:#155724
+
 ```
