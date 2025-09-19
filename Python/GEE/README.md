@@ -28,81 +28,14 @@ E instale:
 
 Diferente de outros métodos, a abordagem mais robusta para um ambiente de terminal é integrar a autenticação diretamente no script. Ele tentará se conectar e, se for a primeira vez, guiará você pelo processo de autenticação.
 
-Salve este código em um arquivo, por exemplo `gerar_dem_gee.py`.
+Use o código de [`dem_gee_processamento.py`](dem_gee_processamento.py).
 
-```python
-# gerar_dem_gee.py
-
-import ee
-
-# --------------------------------------------------------------------------
-# PASSO 1: AUTENTICAÇÃO E INICIALIZAÇÃO
-# Este bloco 'try...except' lida com a autenticação na primeira execução.
-# --------------------------------------------------------------------------
-try:
-    # Tenta inicializar. Se as credenciais já existirem, funciona direto.
-    ee.Initialize()
-except Exception as e:
-    # Se falhar, significa que é a primeira vez ou as credenciais expiraram.
-    print("Primeira autenticação necessária. Siga as instruções...")
-    
-    # Força o método de autenticação interativo (baseado em link),
-    # que funciona perfeitamente no terminal.
-    ee.Authenticate(auth_mode='notebook')
-    
-    # Tenta inicializar novamente após a autenticação bem-sucedida.
-    ee.Initialize()
-
-print("Conexão com o Google Earth Engine estabelecida com sucesso!")
-
-# --------------------------------------------------------------------------
-# PASSO 2: DEFINIR A ÁREA DE INTERESSE (ESTADO DE SÃO PAULO)
-# --------------------------------------------------------------------------
-aoi_sp = ee.Geometry.Rectangle([-53.2, -25.4, -44.1, -19.7])
-
-# --------------------------------------------------------------------------
-# PASSO 3: PROCESSAMENTO EM NUVEM
-# --------------------------------------------------------------------------
-# 1. Carrega a ImageCollection do Copernicus DEM (GLO30) e filtra pela nossa área.
-dem_collection = ee.ImageCollection('COPERNICUS/DEM/GLO30').filterBounds(aoi_sp)
-
-# 2. Seleciona a banda de elevação, que se chama 'DEM'.
-dem_band = dem_collection.select('DEM')
-
-# 3. Usa .median() para criar um mosaico robusto e de alta qualidade e o corta.
-dem_sp = dem_band.median().clip(aoi_sp)
-
-print("Receita de processamento montada. O DEM de São Paulo está pronto para ser exportado.")
-
-# --------------------------------------------------------------------------
-# PASSO 4: EXPORTAR O RESULTADO FINAL PARA O GOOGLE DRIVE
-# --------------------------------------------------------------------------
-task = ee.batch.Export.image.toDrive(
-  image=dem_sp,
-  description='DEM_Sao_Paulo_Copernicus_GLO30',
-  folder='GEE_Exports',
-  region=aoi_sp,
-  scale=30,
-  maxPixels=1e13,
-  fileFormat='GeoTIFF',
-  formatOptions={'cloudOptimized': True}
-)
-
-# Inicia a tarefa de exportação nos servidores do GEE
-task.start()
-
-print("\nExportação iniciada com sucesso!")
-print("O script no seu terminal já pode ser fechado. A tarefa continuará na nuvem.")
-print("Para acompanhar o progresso, acesse a aba 'Tasks' no GEE Code Editor:")
-print("https://code.earthengine.google.com/tasks")
-print(f"ID da tarefa: {task.id} | Status inicial: {task.status()['state']}")
-```
 
 ## Etapa 2: Execução e Monitoramento
 
 1.  **Execute o script** no seu terminal (com o `venv` ativado):
     ```bash
-    python gerar_dem_gee.py
+    python dem_gee_processamento.py
     ```
 2.  **Autenticação (somente na primeira vez):**
     *   O script imprimirá "Primeira autenticação necessária..." e fornecerá um **link**.
@@ -122,22 +55,22 @@ print(f"ID da tarefa: {task.id} | Status inicial: {task.status()['state']}")
 
 ```mermaid
 graph TD
-    subgraph Local (Seu Computador)
-        A[Terminal com venv] -->|executa| B[Script Python: gerar_dem_gee.py];
-        B -->|na 1ª vez| C{Autenticação via Link/Token};
+    subgraph "Local (Seu Computador)"
+        A[Terminal com venv] -->|executa| B[Script Python: dem_gee_processamento.py];
+        B -->|na 1a vez| C{Autenticacao via Link/Token};
         C --> D{Credenciais Salvas};
     end
 
-    subgraph Nuvem (Servidores do Google)
+    subgraph "Nuvem (Servidores do Google)"
         E[Google Earth Engine] --> F[Dataset: Copernicus DEM];
         F --> G[Processamento: Median + Clip];
-        G --> H[Tarefa de Exportação];
+        G --> H[Tarefa de Exportacao];
         I[Google Drive]
     end
     
-    B -->|envia instruções| E;
+    B -->|envia instrucoes| E;
     H -->|salva o arquivo| I;
 
-    style D fill:#d4edda,stroke:#155724
-    style I fill:#d4edda,stroke:#155724
+    style D fill:#056b1e,stroke:#155724
+    style I fill:#056b1e,stroke:#155724
 ```
