@@ -87,3 +87,38 @@ Com a pasta `dems_finais_sp` cheia de arquivos `.tif`, o passo final é uni-los 
 *   **Footprint vs. Imagem Corrigida:** O footprint (inclinado) representa a geometria da captura do satélite. O DEM (retangular, alinhado ao norte) é o produto final após a correção geométrica (ortorretificação). O desalinhamento entre eles é normal e esperado.
 *   **Resolução do DEM:** Os arquivos DEM nos produtos ALOS PALSAR RTC de 12.5m são derivados de fontes de ~30m (como o Copernicus DEM). Eles são **reamostrados** para 12.5m para corresponder à grade da imagem de radar, mas a resolução efetiva da informação de relevo é de 30m.
 *   **Robustez do Código:** Ao lidar com grandes arquivos de dados, é crucial escrever código que antecipe problemas, como arquivos ausentes, inconsistências nos nomes (`_dem.tif` vs `.dem.tif`) e estruturas de pastas inesperadas.
+
+---
+
+### Fluxo de Trabalho: Mosaico DEM com `asf_search`
+
+```mermaid
+graph TD
+    A[["Pré-requisitos: Python, QGIS, Conta NASA"]] --> B;
+
+    subgraph "Etapa 1: Exploracao"
+        B["Executar script 'seach_date_analyse.py'"] --> C[("exp_protudo.txt")];
+        C --> D{"Analise Manual das Datas"};
+        D --> E["Executar script 'footprints_search.py'"];
+        E --> F[("footprints_sp.geojson")];
+        F --> G["Visualizar Footprints no QGIS"];
+    end
+
+    G --> H;
+
+    subgraph "Etapa 2: Selecao"
+        H["Selecionar cenas necessarias no QGIS"] --> I[("list_imag.txt")];
+    end
+
+    I --> J;
+
+    subgraph "Etapa 3: Download e Extracao"
+        J["Executar script 'dem_download.py'"] --> K[("Pasta com DEMs individuais")];
+    end
+
+    K --> L;
+
+    subgraph "Etapa 4: Mosaico"
+        L["Usar ferramenta Mosaico (Merge) no QGIS"] --> M[["DEM Final Mosaico (.tif)"]];
+    end
+```
