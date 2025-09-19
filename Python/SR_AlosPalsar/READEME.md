@@ -1,6 +1,22 @@
 ---
 
-# Tutorial: Criando um Mosaico DEM de Larga Escala com ALOS PALSAR e Python
+# Tutorial: Criando um Mosaico DEM de Larga Escala com ALOS PALSAR e Python via asf_searcha
+
+# asf_search
+
+[![PyPI version](https://img.shields.io/pypi/v/asf_search.svg)](https://pypi.python.org/pypi/asf_search/)
+[![Conda version](https://img.shields.io/conda/vn/conda-forge/asf_search)](https://anaconda.org/conda-forge/asf_search)
+
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/asf_search.svg)](https://pypi.python.org/pypi/asf_search/)
+[![PyPI license](https://img.shields.io/pypi/l/asf_search.svg)](https://pypi.python.org/pypi/asf_search/)
+
+[![CodeFactor](https://www.codefactor.io/repository/github/asfadmin/discovery-asf_search/badge)](https://www.codefactor.io/repository/github/asfadmin/discovery-asf_search)
+[![Github workflow](https://github.com/asfadmin/asf_search/actions/workflows/run-pytest.yml/badge.svg)](https://github.com/asfadmin/Discovery-asf_search/actions/workflows/run-pytest.yml)
+
+![CodeCov](https://img.shields.io/codecov/c/github/asfadmin/Discovery-asf_search/master)
+
+[![Documentation](https://img.shields.io/badge/docs-at_ASF-green)](https://docs.asf.alaska.edu/asf_search/basics/)
+[![Join the chat at https://gitter.im/ASFDiscovery/asf_search](https://badges.gitter.im/ASFDiscovery/asf_search.svg)](https://gitter.im/ASFDiscovery/asf_search?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Este tutorial descreve o fluxo de trabalho completo para buscar, baixar e preparar dados de Modelos Digitais de Elevação (DEM) derivados de imagens de satélite ALOS PALSAR, com o objetivo de criar um mosaico para uma área extensa, como o estado de São Paulo.
 
