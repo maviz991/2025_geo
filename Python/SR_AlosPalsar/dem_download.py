@@ -1,3 +1,4 @@
+#Use a lista de fileID gerada por footprints_search.py
 import asf_search as asf
 from getpass import getpass
 import os
