@@ -9,7 +9,7 @@ Este tutorial descreve o fluxo de trabalho completo para buscar, baixar e prepar
 Antes de começar, garanta que você tenha:
 
 1.  **Python 3.x** instalado.
-2.  A biblioteca `asf_search` instalada.
+2.  A biblioteca `asf_search` instalada [Github do projeto](https://github.com/asfadmin/Discovery-asf_search).
    
     ```bash
     pip install asf_search
